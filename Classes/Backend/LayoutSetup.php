@@ -85,7 +85,7 @@ class LayoutSetup
      */
     public function init($pageId, array $typoScriptSetup = [])
     {
-        $this->setLanguageService($GLOBALS['LANG']);
+        $this->setLanguageService();
         $pageId = (strpos($pageId, 'NEW') === 0) ? 0 : (int)$pageId;
         if ((int)$pageId < 0) {
             $pageId = Helper::getInstance()->getPidFromUid($pageId);
@@ -97,9 +97,9 @@ class LayoutSetup
             if ($columns['allowed'] || $columns['disallowed'] || $columns['maxitems']) {
                 $this->layoutSetup[$key]['columns'] = $columns;
                 unset($this->layoutSetup[$key]['columns']['allowed']);
-                $this->layoutSetup[$key]['allowed'] = $columns['allowed'] ?: [];
-                $this->layoutSetup[$key]['disallowed'] = $columns['disallowed'] ?: [];
-                $this->layoutSetup[$key]['maxitems'] = $columns['maxitems'] ?: [];
+                $this->layoutSetup[$key]['allowed'] = $columns['allowed'] ?? [];
+                $this->layoutSetup[$key]['disallowed'] = $columns['disallowed'] ?? [];
+                $this->layoutSetup[$key]['maxitems'] = $columns['maxitems'] ?? [];
             }
         }
         $this->setTypoScriptSetup($typoScriptSetup);
@@ -138,7 +138,7 @@ class LayoutSetup
                 }
 
                 // Parse icon path for records.
-                if ($item['icon']) {
+                if ($item['icon'] ?? '') {
                     $icons = explode(',', $item['icon']);
                     $item['icon'] = $icons;
                 }
@@ -315,7 +315,7 @@ class LayoutSetup
                     if (isset($column['disallowed.'])) {
                         $column['disallowed'] = $column['disallowed.'];
                     }
-                    if (!is_array($column['allowed']) && !empty($column['allowed'])) {
+                    if (!is_array($column['allowed'] ?? null) && !empty($column['allowed'])) {
                         $allowed[$colPos] = ['CType' => $column['allowed']];
                     } else {
                         if (empty($column['allowed'])) {
@@ -324,7 +324,7 @@ class LayoutSetup
                             $allowed[$colPos] = $column['allowed'];
                         }
                     }
-                    if ($column['allowedGridTypes']) {
+                    if ($column['allowedGridTypes'] ?? null) {
                         $allowed[$colPos]['tx_gridelements_backend_layout'] = $column['allowedGridTypes'];
                     }
                     if (!empty($column['disallowed'])) {
